@@ -1,7 +1,21 @@
 import React from "react";
 import "../styles/Product.css";
+import { connect } from "react-redux";
+import { addToBasket } from "../action";
 
-function Product({ title, image, price, rating }) {
+function Product(props) {
+  const { title, image, price, rating, id, basket } = props;
+
+  const addTotheBasket = () => {
+    props.addToBasket({
+      id: id,
+      title: title,
+      image: image,
+      price: price,
+      rating: rating,
+    });
+  };
+
   return (
     <div className="product">
       <div className="product__info">
@@ -19,9 +33,13 @@ function Product({ title, image, price, rating }) {
         </div>
       </div>
       <img src={image} />
-      <button>Add To Basket</button>
+      <button onClick={addTotheBasket}>Add To Basket</button>
     </div>
   );
 }
 
-export default Product;
+const mapDispatchToProps = {
+  addToBasket,
+};
+
+export default connect(null, mapDispatchToProps)(Product);

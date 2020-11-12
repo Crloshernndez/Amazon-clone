@@ -4,8 +4,19 @@ import SearchIcon from "@material-ui/icons/Search";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { auth } from "../firebase";
+import { setUser } from "../action";
 
-function Header({ basket }) {
+function Header(props) {
+  const { basket, user } = props;
+
+  const handleAuthentication = () => {
+    if (user) {
+      auth.signOut();
+      props.setUser(null);
+    }
+  };
+
   return (
     <div className="header">
       <Link to="/">
@@ -20,10 +31,14 @@ function Header({ basket }) {
         <SearchIcon className="header__searchIcon" />
       </div>
       <div className="header__nav">
-        <Link to="/login">
-          <div className="header__option">
-            <span className="header__optionLineOne">Hello Guest</span>
-            <span className="header__optionLineTwo">Sing In</span>
+        <Link to={!user && "/login"}>
+          <div className="header__option" onClick={handleAuthentication}>
+            <span className="header__optionLineOne">
+              {user ? user.email : "Hello Guest"}
+            </span>
+            <span className="header__optionLineTwo">
+              {user ? "Sing Out" : "Sing In"}
+            </span>
           </div>
         </Link>
         <div className="header__option">
@@ -50,7 +65,12 @@ function Header({ basket }) {
 const mapStateToProps = (state) => {
   return {
     basket: state.basket,
+    user: state.user,
   };
 };
 
-export default connect(mapStateToProps, null)(Header);
+const mapDispatchToProps = {
+  setUser,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

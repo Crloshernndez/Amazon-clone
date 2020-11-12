@@ -4,7 +4,7 @@ import Subtotal from "../component/Subtotal";
 import { connect } from "react-redux";
 import CheckoutProduct from "../component/CheckoutProduct";
 
-function Checkout({ basket }) {
+function Checkout({ basket, user }) {
   return (
     <div className="checkout">
       <div className="checkout__left">
@@ -14,6 +14,7 @@ function Checkout({ basket }) {
           alt="add"
         />
         <div>
+          <h3>Hello, {user?.email}</h3>
           <h2 className="checkout__title">Your Shopping Basket</h2>
           {basket.map((item) => (
             <CheckoutProduct
@@ -36,6 +37,7 @@ function Checkout({ basket }) {
 const mapStateToProps = (state) => {
   return {
     basket: state.basket,
+    user: state.user,
   };
 };
 

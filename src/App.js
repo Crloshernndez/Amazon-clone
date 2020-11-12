@@ -1,40 +1,50 @@
+import React, { useEffect } from "react";
 import "./App.css";
 import Header from "./component/Header";
 import Home from "./containers/Home";
 import Checkout from "./containers/Checkout";
 import Login from "./containers/Login";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { auth } from "./firebase";
+import { setUser } from "./action";
 
-import { Provider } from "react-redux";
-import { createStore, compose } from "redux";
-import reducer from "./reducer";
-import initialState from "./initialState";
+import { connect } from "react-redux";
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducer, initialState, composeEnhancers());
+function App(props) {
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        console.log(authUser);
+        props.setUser(authUser);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
 
-function App() {
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <div className="app">
-          <Switch>
-            <Route exact path="/">
-              <Header />
-              <Home />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/checkout">
-              <Header />
-              <Checkout />
-            </Route>
-          </Switch>
-        </div>
-      </BrowserRouter>
-    </Provider>
+    <BrowserRouter>
+      <div className="app">
+        <Switch>
+          <Route exact path="/">
+            <Header />
+            <Home />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/checkout">
+            <Header />
+            <Checkout />
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 
-export default App;
+const mapDispatchToProps = {
+  setUser,
+};
+
+export default connect(null, mapDispatchToProps)(App);

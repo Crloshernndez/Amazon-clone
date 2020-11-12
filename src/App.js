@@ -9,6 +9,7 @@ import { auth } from "./firebase";
 import { setUser } from "./action";
 
 import { connect } from "react-redux";
+import Payment from "./containers/Payment";
 
 function App(props) {
   useEffect(() => {
@@ -36,6 +37,10 @@ function App(props) {
           <Route exact path="/checkout">
             <Header />
             <Checkout />
+          </Route>
+          <Route exact path="/payment">
+            <Header />
+            <Payment />
           </Route>
         </Switch>
       </div>

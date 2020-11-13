@@ -4,7 +4,7 @@ import CurrencyFormat from "react-currency-format";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 
-const getBasketTotal = (basket) =>
+export const getBasketTotal = (basket) =>
   basket?.reduce((amount, item) => item.price + amount, 0);
 
 function Subtotal({ basket }) {

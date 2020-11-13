@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import Header from "./component/Header";
-import Home from "./containers/Home";
-import Checkout from "./containers/Checkout";
-import Login from "./containers/Login";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { auth } from "./firebase";
 import { setUser } from "./action";
+import Home from "./containers/Home";
+import { connect } from "react-redux";
+import Login from "./containers/Login";
+import Header from "./component/Header";
+import Orders from "./containers/Orders";
+import Payment from "./containers/Payment";
+import Checkout from "./containers/Checkout";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-
-import { connect } from "react-redux";
-import Payment from "./containers/Payment";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 const promise = loadStripe(
   "pk_test_51HmqerLuoz5shZBVyu6D0rG7WBaSAd5zJu6Sn52LBGlrjYsq3j6YCpavfdrYYgfohOT9twomw8HDi4EQw93SUc6s00WLUHMNg1"
@@ -49,6 +49,9 @@ function App(props) {
             <Elements stripe={promise}>
               <Payment />
             </Elements>
+          </Route>
+          <Route exact path="/orders">
+            <Orders />
           </Route>
         </Switch>
       </div>

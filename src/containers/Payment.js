@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "../axios";
 import "../styles/Payment.css";
+import { db } from "../firebase";
 import { connect } from "react-redux";
+import { emptyBasket } from "../action";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import CurrencyFormat from "react-currency-format";
@@ -47,9 +49,20 @@ function Payment(props) {
         },
       })
       .then(({ paymentIntent }) => {
+        db.collection("users")
+          .doc("user?.uid")
+          .collection("orders")
+          .doc(paymentIntent.id)
+          .set({
+            basket: basket,
+            amount: paymentIntent.amount,
+            created: paymentIntent.created,
+          });
+
         setSucceeded(true);
         setError(null);
         setProcessing(false);
+        props.emptyBasket();
 
         history.replace("/orders");
       });
@@ -129,4 +142,8 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, null)(Payment);
+const mapDispatchToProps = {
+  emptyBasket,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Payment);

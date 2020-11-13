@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { removeFromBasket } from "../action";
 
 function CheckoutProduct(props) {
-  const { title, image, price, rating, id } = props;
+  const { title, image, price, rating, id, hidenbutton } = props;
 
   const handleRemoveFromBasket = () => props.removeFromBasket(id);
 
@@ -24,7 +24,9 @@ function CheckoutProduct(props) {
               <p>⭐</p>
             ))}
         </div>
-        <button onClick={handleRemoveFromBasket}>Remove From Basket</button>
+        {!hidenbutton && (
+          <button onClick={handleRemoveFromBasket}>Remove From Basket</button>
+        )}
       </div>
     </div>
   );
